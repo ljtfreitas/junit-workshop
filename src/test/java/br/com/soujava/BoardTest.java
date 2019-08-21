@@ -12,7 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.CsvSource;
 
 @DisplayName("Testes do quadro de tarefas")
 class BoardTest {
@@ -41,8 +41,13 @@ class BoardTest {
 	}
 
 	@DisplayName("Nao deve permitir criar tarefas em horarios de descanso")
-    @ParameterizedTest(name = "Teste {index}: Nao deve permitir tarefas comecando as {0}")
-    @ValueSource(strings = {"08:30", "19:30", "18:00"})
+    @ParameterizedTest(name = "Teste {index}: Nao deve permitir tarefas comecando as {0}, com {1}h de duracao")
+	@CsvSource({
+		"08:30,	1",
+		"19:30,	2",
+		"18:30,	1",
+		"16:00,	4"
+	})
     void shouldThrowExceptionWhenTaskStartsInBreakTimes(String time, int hours) {
         LocalTime horribleTimeToDoSomething = LocalTime.parse(time);
         Duration duration = Duration.ofHours(hours);
