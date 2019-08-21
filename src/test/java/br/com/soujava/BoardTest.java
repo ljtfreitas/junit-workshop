@@ -37,7 +37,7 @@ class BoardTest {
 	void shouldThrowExceptionWhenTaskStartsEarly() {
 		Board board = new Board();
 
-		assertThrows(IllegalArgumentException.class,
+		assertThrows(TooEarlyException.class,
 				() -> board.addTask("Whatever", LocalTime.parse("08:00"), Duration.ofHours(1)));
 	}
 
@@ -46,7 +46,7 @@ class BoardTest {
 	void shouldThrowExceptionWhenTaskStartsTooLate() {
 		Board board = new Board();
 
-		assertThrows(IllegalArgumentException.class,
+		assertThrows(TooLateException.class,
 				() -> board.addTask("Whatever", LocalTime.parse("19:30"), Duration.ofHours(1)));
 	}
 
