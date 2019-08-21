@@ -2,6 +2,7 @@ package br.com.soujava;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.Duration;
 import java.time.LocalTime;
@@ -29,5 +30,14 @@ class BoardTest {
 		assertAll(() -> assertEquals("Whatever", newTask.name),
 				  () -> assertEquals(LocalTime.parse("09:00"), newTask.startTime),
 				  () -> assertEquals(Duration.ofHours(1), newTask.duration));
+	}
+
+	@DisplayName("Nao deve permitir criar tarefas antes das 09:00")
+	@Test
+	void shouldThrowExceptionWhenTaskStartsEarly() {
+		Board board = new Board();
+
+		assertThrows(IllegalArgumentException.class,
+				() -> board.addTask("Whatever", LocalTime.parse("08:00"), Duration.ofHours(1)));
 	}
 }
