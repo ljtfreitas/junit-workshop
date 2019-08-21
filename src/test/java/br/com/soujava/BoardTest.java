@@ -46,7 +46,9 @@ class BoardTest {
     void shouldThrowExceptionWhenTaskStartsInBreakTimes(String time) {
         LocalTime horribleTimeToDoSomething = LocalTime.parse(time);
 
-        assertThrows(Exception.class,
+        HorribleTimeToDoSomethingException exception = assertThrows(HorribleTimeToDoSomethingException.class,
                 () -> board.addTask("Whatever", horribleTimeToDoSomething, Duration.ofHours(1)));
+        
+        assertEquals(horribleTimeToDoSomething, exception.horribleTime);
     }
 }

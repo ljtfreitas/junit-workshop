@@ -2,14 +2,11 @@ package br.com.soujava;
 
 import java.time.LocalTime;
 
-class TooLateException extends RuntimeException {
+class TooLateException extends HorribleTimeToDoSomethingException {
 
 	private static final long serialVersionUID = 1L;
 
-	final LocalTime lateTime;
-
 	TooLateException(String message, LocalTime lateTime) {
-		super(message);
-		this.lateTime = lateTime;
+		super(message, lateTime);
 	}
 }
