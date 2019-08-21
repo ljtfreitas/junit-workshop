@@ -14,6 +14,7 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 
@@ -27,40 +28,51 @@ class BoardTest {
 		board = new Board();
 	}
 
-	@DisplayName("Deve adicionar uma nova tarefa no quadro")
-	@Test
-	void shouldAddNewTaskToBoard() {
-		board.addTask("Whatever", LocalTime.parse("09:00"), Duration.ofHours(1));
+	@DisplayName("Quando o quadro estiver vazio")
+	@Nested
+	class WhenEmptyBoard {
 
-		List<Task> tasks = board.tasks();
-
-		assertEquals(1, tasks.size());
-
-		Task newTask = tasks.get(0);
-
-		assertAll(() -> assertEquals("Whatever", newTask.name),
-				  () -> assertEquals(LocalTime.parse("09:00"), newTask.startTime),
-				  () -> assertEquals(Duration.ofHours(1), newTask.duration));
-	}
-
-	@TestFactory
-    @DisplayName("Testes de horarios de descanso")
-    Stream<DynamicTest> tasksInBreakTimes() {
-        return Stream.of(TaskArguments.of("08:30", 1), TaskArguments.of("18:30", 1), TaskArguments.of("16:00", 5))
-                .map(task -> 
-                		dynamicTest("Nao deve permitir uma tarefa comecando as " + task.time + " com " + task.duration.toHours() + "h de duracao",
-                				() -> assertThrows(HorribleTimeToDoSomethingException.class, () -> board.addTask("Whatever", task.time, task.duration))));
-    }
+		@DisplayName("Deve adicionar uma nova tarefa no quadro")
+		@Test
+		void shouldAddNewTaskToBoard() {
+			board.addTask("Whatever", LocalTime.parse("09:00"), Duration.ofHours(1));
 	
-	@DisplayName("Deve remover uma tarefa do quadro")
-	@Test
-	void shouldRemoveTaskFromBoard() {
-		Task newTask = board.addTask("Do Something", LocalTime.parse("14:00"), Duration.ofHours(2));
+			List<Task> tasks = board.tasks();
+	
+			assertEquals(1, tasks.size());
+	
+			Task newTask = tasks.get(0);
+	
+			assertAll(() -> assertEquals("Whatever", newTask.name),
+					  () -> assertEquals(LocalTime.parse("09:00"), newTask.startTime),
+					  () -> assertEquals(Duration.ofHours(1), newTask.duration));
+		}
+	
+		@TestFactory
+	    @DisplayName("Não deve permmitir adicionar tarefas nos seguintes horários")
+	    Stream<DynamicTest> tasksInBreakTimes() {
+	        return Stream.of(TaskArguments.of("08:30", 1), TaskArguments.of("18:30", 1), TaskArguments.of("16:00", 5))
+	                .map(task -> 
+	                		dynamicTest("Nao deve permitir uma tarefa comecando as " + task.time + " com " + task.duration.toHours() + "h de duracao",
+	                				() -> assertThrows(HorribleTimeToDoSomethingException.class, () -> board.addTask("Whatever", task.time, task.duration))));
+	    }
+		
+		@DisplayName("Quando existirem tarefas no quadro")
+		@Nested
+		class AfterAddTasks {
+			
+			@DisplayName("Deve remover uma tarefa do quadro")
+			@Test
+			void shouldRemoveTaskFromBoard() {
+				Task newTask = board.addTask("Do Something", LocalTime.parse("14:00"), Duration.ofHours(2));
+				
+				board.remove(newTask);
+				
+				assertTrue(board.tasks().isEmpty());
+			}
+		}
+	}	
 
-		board.remove(newTask);
-
-		assertTrue(board.tasks().isEmpty());
-	}
 
 	static class TaskArguments {
 
