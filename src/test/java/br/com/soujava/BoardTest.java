@@ -11,6 +11,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 @DisplayName("Testes do quadro de tarefas")
 class BoardTest {
@@ -38,25 +40,13 @@ class BoardTest {
 				  () -> assertEquals(Duration.ofHours(1), newTask.duration));
 	}
 
-	@DisplayName("Nao deve permitir criar tarefas antes das 09:00")
-	@Test
-	void shouldThrowExceptionWhenTaskStartsEarly() {
-		LocalTime tooEarlyTime = LocalTime.parse("08:00");
+	@DisplayName("Nao deve permitir criar tarefas em horarios de descanso")
+    @ParameterizedTest
+    @ValueSource(strings = {"08:30", "19:30"})
+    void shouldThrowExceptionWhenTaskStartsInBreakTimes(String time) {
+        LocalTime horribleTimeToDoSomething = LocalTime.parse(time);
 
-		TooEarlyException exception = assertThrows(TooEarlyException.class,
-				() -> board.addTask("Whatever", tooEarlyTime, Duration.ofHours(1)));
-		
-		assertEquals(tooEarlyTime, exception.earlyTime);
-	}
-
-	@DisplayName("Nao deve permitir criar tarefas apos as 19:00")
-	@Test
-	void shouldThrowExceptionWhenTaskStartsTooLate() {
-		LocalTime tooLateTime = LocalTime.parse("19:30");
-
-		TooLateException exception = assertThrows(TooLateException.class,
-				() -> board.addTask("Whatever", tooLateTime, Duration.ofHours(1)));
-
-		assertEquals(tooLateTime, exception.lateTime);
-	}
+        assertThrows(Exception.class,
+                () -> board.addTask("Whatever", horribleTimeToDoSomething, Duration.ofHours(1)));
+    }
 }
