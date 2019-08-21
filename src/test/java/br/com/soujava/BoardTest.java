@@ -6,10 +6,13 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.util.List;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+@DisplayName("Testes do quadro de tarefas")
 class BoardTest {
 
+	@DisplayName("Deve adicionar uma nova tarefa no quadro")
 	@Test
 	void shouldAddNewTaskToBoard() {
 		Board board = new Board();
