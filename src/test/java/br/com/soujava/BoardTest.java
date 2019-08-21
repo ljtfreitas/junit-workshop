@@ -3,20 +3,16 @@ package br.com.soujava;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 import java.time.Duration;
 import java.time.LocalTime;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 
 @DisplayName("Testes do quadro de tarefas")
 class BoardTest {
@@ -46,7 +42,7 @@ class BoardTest {
 
 	@DisplayName("Nao deve permitir criar tarefas em horarios de descanso")
     @ParameterizedTest(name = "Teste {index}: Nao deve permitir tarefas comecando as {0}, com {1}h de duracao")
-	@MethodSource("horribleTimesToDoSomething")
+	@ArgumentsSource(HorribleTimesToDoSomethingArgumentsProvider.class)
     void shouldThrowExceptionWhenTaskStartsInBreakTimes(String time, Duration duration) {
         LocalTime horribleTimeToDoSomething = LocalTime.parse(time);
 
@@ -55,11 +51,4 @@ class BoardTest {
         
         assertEquals(horribleTimeToDoSomething, exception.horribleTime);
     }
-	
-	static Collection<Arguments> horribleTimesToDoSomething() {
-		return Arrays.asList(arguments("08:30", Duration.ofHours(1)),
-							  arguments("19:30", Duration.ofHours(2)),
-							  arguments("18:30", Duration.ofHours(1)),
-							  arguments("16:00", Duration.ofHours(4)));
-	}
 }
