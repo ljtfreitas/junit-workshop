@@ -16,7 +16,7 @@ class Board {
 		if (startTime.isBefore(FIRST_HOUR_OF_DAY)) {
             throw new TooEarlyException(startTime + " it's too early...Go to bed", startTime);
         }
-		if (startTime.isAfter(LAST_HOUR_OF_DAY)) {
+		if (startTime.plus(duration).isAfter(LAST_HOUR_OF_DAY)) {
             throw new TooLateException(startTime + " it's later...Go to TV", startTime);
         }
 
