@@ -1,5 +1,6 @@
 package br.com.soujava;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.Duration;
@@ -25,8 +26,8 @@ class BoardTest {
 
 		Task newTask = tasks.get(0);
 
-		assertEquals("Whatever", newTask.name);
-		assertEquals(LocalTime.parse("09:00"), newTask.startTime);
-		assertEquals(Duration.ofHours(1), newTask.duration);
+		assertAll(() -> assertEquals("Whatever", newTask.name),
+				  () -> assertEquals(LocalTime.parse("09:00"), newTask.startTime),
+				  () -> assertEquals(Duration.ofHours(1), newTask.duration));
 	}
 }
