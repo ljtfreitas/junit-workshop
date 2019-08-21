@@ -27,10 +27,12 @@ class Board {
 		return newTask;
 	}
 
+	void remove(Task task) {
+		tasks.remove(task);
+	}
+
 	List<Task> tasks() {
 		return tasks;
 	}
 
-	void remove(Task newTask) {
-	}
 }

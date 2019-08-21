@@ -61,7 +61,7 @@ class BoardTest {
 
 		assertTrue(board.tasks().isEmpty());
 	}
-	
+
 	static class TaskArguments {
 
 		final LocalTime time;
