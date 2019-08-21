@@ -40,4 +40,14 @@ class BoardTest {
 		assertThrows(IllegalArgumentException.class,
 				() -> board.addTask("Whatever", LocalTime.parse("08:00"), Duration.ofHours(1)));
 	}
+
+	@DisplayName("Nao deve permitir criar tarefas apos as 19:00")
+	@Test
+	void shouldThrowExceptionWhenTaskStartsTooLate() {
+		Board board = new Board();
+
+		assertThrows(IllegalArgumentException.class,
+				() -> board.addTask("Whatever", LocalTime.parse("19:00"), Duration.ofHours(1)));
+	}
+
 }
