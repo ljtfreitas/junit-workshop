@@ -17,11 +17,16 @@ class BoardTest {
 	void shouldAddNewTaskToBoard() {
 		Board board = new Board();
 
-        board.addTask("Whatever", LocalTime.parse("09:00"), Duration.ofHours(1));
+		board.addTask("Whatever", LocalTime.parse("09:00"), Duration.ofHours(1));
 
-        List<Task> tasks = board.tasks();
+		List<Task> tasks = board.tasks();
 
-        assertEquals(1, tasks.size());
+		assertEquals(1, tasks.size());
+
+		Task newTask = tasks.get(0);
+
+		assertEquals("Whatever", newTask.name);
+		assertEquals(LocalTime.parse("09:00"), newTask.startTime);
+		assertEquals(Duration.ofHours(1), newTask.duration);
 	}
-
 }
