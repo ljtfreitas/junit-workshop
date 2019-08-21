@@ -37,8 +37,12 @@ class BoardTest {
 	void shouldThrowExceptionWhenTaskStartsEarly() {
 		Board board = new Board();
 
-		assertThrows(TooEarlyException.class,
-				() -> board.addTask("Whatever", LocalTime.parse("08:00"), Duration.ofHours(1)));
+		LocalTime tooEarlyTime = LocalTime.parse("08:00");
+
+		TooEarlyException exception = assertThrows(TooEarlyException.class,
+				() -> board.addTask("Whatever", tooEarlyTime, Duration.ofHours(1)));
+		
+		assertEquals(tooEarlyTime, exception.earlyTime);
 	}
 
 	@DisplayName("Nao deve permitir criar tarefas apos as 19:00")
@@ -46,8 +50,11 @@ class BoardTest {
 	void shouldThrowExceptionWhenTaskStartsTooLate() {
 		Board board = new Board();
 
-		assertThrows(TooLateException.class,
-				() -> board.addTask("Whatever", LocalTime.parse("19:30"), Duration.ofHours(1)));
-	}
+		LocalTime tooLateTime = LocalTime.parse("19:30");
 
+		TooLateException exception = assertThrows(TooLateException.class,
+				() -> board.addTask("Whatever", tooLateTime, Duration.ofHours(1)));
+
+		assertEquals(tooLateTime, exception.lateTime);
+	}
 }
