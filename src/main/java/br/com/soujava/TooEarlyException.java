@@ -6,9 +6,10 @@ class TooEarlyException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 	
-	LocalTime earlyTime;
+	final LocalTime earlyTime;
 
-	TooEarlyException(String message) {
+	TooEarlyException(String message, LocalTime earlyTime) {
 		super(message);
+		this.earlyTime = earlyTime;
 	}
 }

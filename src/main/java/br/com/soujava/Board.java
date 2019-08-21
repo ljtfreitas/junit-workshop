@@ -14,10 +14,10 @@ class Board {
 
 	Task addTask(String name, LocalTime startTime, Duration duration) {
 		if (startTime.isBefore(FIRST_HOUR_OF_DAY)) {
-            throw new TooEarlyException(startTime + " it's too early...Go to bed");
+            throw new TooEarlyException(startTime + " it's too early...Go to bed", startTime);
         }
 		if (startTime.isAfter(LAST_HOUR_OF_DAY)) {
-            throw new TooLateException(startTime + " it's later...Go to TV");
+            throw new TooLateException(startTime + " it's later...Go to TV", startTime);
         }
 
 		Task newTask = new Task(name, startTime, duration);

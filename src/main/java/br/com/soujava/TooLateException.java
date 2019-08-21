@@ -6,9 +6,10 @@ class TooLateException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	LocalTime lateTime;
+	final LocalTime lateTime;
 
-	TooLateException(String message) {
+	TooLateException(String message, LocalTime lateTime) {
 		super(message);
+		this.lateTime = lateTime;
 	}
 }
