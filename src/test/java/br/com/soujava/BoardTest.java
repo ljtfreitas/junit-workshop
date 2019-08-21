@@ -3,16 +3,18 @@ package br.com.soujava;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.api.TestFactory;
 
 @DisplayName("Testes do quadro de tarefas")
 class BoardTest {
@@ -40,15 +42,27 @@ class BoardTest {
 				  () -> assertEquals(Duration.ofHours(1), newTask.duration));
 	}
 
-	@DisplayName("Nao deve permitir criar tarefas em horarios de descanso")
-    @ParameterizedTest(name = "Teste {index}: Nao deve permitir tarefas comecando as {0}, com {1}h de duracao")
-	@ArgumentsSource(HorribleTimesToDoSomethingArgumentsProvider.class)
-    void shouldThrowExceptionWhenTaskStartsInBreakTimes(String time, Duration duration) {
-        LocalTime horribleTimeToDoSomething = LocalTime.parse(time);
-
-        HorribleTimeToDoSomethingException exception = assertThrows(HorribleTimeToDoSomethingException.class,
-                () -> board.addTask("Whatever", horribleTimeToDoSomething, duration));
-        
-        assertEquals(horribleTimeToDoSomething, exception.horribleTime);
+	@TestFactory
+    @DisplayName("Testes de horarios de descanso")
+    Stream<DynamicTest> tasksInBreakTimes() {
+        return Stream.of(TaskArguments.of("08:30", 1), TaskArguments.of("18:30", 1), TaskArguments.of("16:00", 5))
+                .map(task -> 
+                		dynamicTest("Nao deve permitir uma tarefa comecando as " + task.time + " com " + task.duration.toHours() + "h de duracao",
+                				() -> assertThrows(HorribleTimeToDoSomethingException.class, () -> board.addTask("Whatever", task.time, task.duration))));
     }
+	
+	static class TaskArguments {
+
+		final LocalTime time;
+		final Duration duration;
+		
+		private TaskArguments(LocalTime time, Duration duration) {
+			this.time = time;
+			this.duration = duration;
+		}
+
+		static TaskArguments of(String time, int hours) {
+			return new TaskArguments(LocalTime.parse(time), Duration.ofHours(hours));
+		}
+	}
 }
