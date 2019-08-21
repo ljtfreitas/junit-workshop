@@ -3,6 +3,7 @@ package br.com.soujava;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 import java.time.Duration;
@@ -50,6 +51,16 @@ class BoardTest {
                 		dynamicTest("Nao deve permitir uma tarefa comecando as " + task.time + " com " + task.duration.toHours() + "h de duracao",
                 				() -> assertThrows(HorribleTimeToDoSomethingException.class, () -> board.addTask("Whatever", task.time, task.duration))));
     }
+	
+	@DisplayName("Deve remover uma tarefa do quadro")
+	@Test
+	void shouldRemoveTaskFromBoard() {
+		Task newTask = board.addTask("Do Something", LocalTime.parse("14:00"), Duration.ofHours(2));
+
+		board.remove(newTask);
+
+		assertTrue(board.tasks().isEmpty());
+	}
 	
 	static class TaskArguments {
 

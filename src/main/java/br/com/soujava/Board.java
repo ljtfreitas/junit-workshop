@@ -30,4 +30,7 @@ class Board {
 	List<Task> tasks() {
 		return tasks;
 	}
+
+	void remove(Task newTask) {
+	}
 }
