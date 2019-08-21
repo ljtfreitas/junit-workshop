@@ -43,11 +43,12 @@ class BoardTest {
 	@DisplayName("Nao deve permitir criar tarefas em horarios de descanso")
     @ParameterizedTest(name = "Teste {index}: Nao deve permitir tarefas comecando as {0}")
     @ValueSource(strings = {"08:30", "19:30", "18:00"})
-    void shouldThrowExceptionWhenTaskStartsInBreakTimes(String time) {
+    void shouldThrowExceptionWhenTaskStartsInBreakTimes(String time, int hours) {
         LocalTime horribleTimeToDoSomething = LocalTime.parse(time);
+        Duration duration = Duration.ofHours(hours);
 
         HorribleTimeToDoSomethingException exception = assertThrows(HorribleTimeToDoSomethingException.class,
-                () -> board.addTask("Whatever", horribleTimeToDoSomething, Duration.ofHours(2)));
+                () -> board.addTask("Whatever", horribleTimeToDoSomething, duration));
         
         assertEquals(horribleTimeToDoSomething, exception.horribleTime);
     }
