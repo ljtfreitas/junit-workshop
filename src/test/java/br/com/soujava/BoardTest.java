@@ -47,7 +47,7 @@ class BoardTest {
 		Board board = new Board();
 
 		assertThrows(IllegalArgumentException.class,
-				() -> board.addTask("Whatever", LocalTime.parse("19:00"), Duration.ofHours(1)));
+				() -> board.addTask("Whatever", LocalTime.parse("19:30"), Duration.ofHours(1)));
 	}
 
 }
