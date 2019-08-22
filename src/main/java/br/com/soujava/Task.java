@@ -23,7 +23,7 @@ class Task {
 
 	TaskResult execute() {
 		try {
-			sleep(5000);
+			sleep(1000);
 		} catch (InterruptedException e) {}
 
 		return new TaskResult(String.format("Task [%s] executed", name));

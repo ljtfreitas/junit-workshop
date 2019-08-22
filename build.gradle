@@ -8,11 +8,16 @@ repositories {
 }
 
 test {
-    useJUnitPlatform()
+    useJUnitPlatform {
+    	includeEngines 'junit-jupiter', 'junit-vintage'
+    }
 }
 
 dependencies {
 	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.5.1'
 	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.5.1'
 	testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '2.1'
+	
+	testImplementation group: 'junit', name: 'junit', version: '4.12'
+    testRuntimeOnly group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.5.1'
 }
