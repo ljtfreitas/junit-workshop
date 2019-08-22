@@ -1,5 +1,6 @@
 package br.com.soujava;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
 import java.time.Duration;
@@ -16,7 +17,9 @@ class TaskTest {
 	void shouldExecuteTaskWithoutExceedTimeout() {
 		Task task = new Task("Do something", LocalTime.parse("09:00"), Duration.ofHours(1));
 
-		assertTimeoutPreemptively(Duration.ofSeconds(2), () -> task.execute());
+		TaskResult result = assertTimeoutPreemptively(Duration.ofSeconds(2), () -> task.execute());
+		
+		assertNotNull(result.description);
 	}
 
 }
