@@ -1,5 +1,7 @@
 package br.com.soujava;
 
+import static java.lang.Thread.sleep;
+
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.Objects;
@@ -17,6 +19,14 @@ class Task {
 		this.name = name;
 		this.startTime = startTime;
 		this.duration = duration;
+	}
+
+	TaskResult execute() {
+		try {
+			sleep(5000);
+		} catch (InterruptedException e) {}
+
+		return new TaskResult(String.format("Task [%s] executed", name));
 	}
 
 	@Override
